@@ -1,0 +1,8 @@
+# *.pt
+# videos/
+venv
+.vscode
+results/*
+!results/.gitkeep
+models/*
+!models/.gitkeep
