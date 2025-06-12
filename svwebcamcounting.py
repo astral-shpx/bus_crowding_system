@@ -29,42 +29,43 @@ def main():
     formatted = now.strftime("%H:%M-%d-%B-%Y")
     sink = sv.VideoSink(target_path=f"results/webcam_output_{formatted.strip()}.mp4", video_info=sv.VideoInfo(width=width, height=height, fps=fps))
     
-    with sink:
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
+    
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-            # Inference and tracking
-            results = model(frame, verbose=False)[0]
-            detections = sv.Detections.from_ultralytics(results)
-            detections = byte_tracker.update_with_detections(detections)
+        # Inference and tracking
+        results = model(frame, verbose=False)[0]
+        detections = sv.Detections.from_ultralytics(results)
+        detections = byte_tracker.update_with_detections(detections)
 
-            # Label format: #tracker_id class confidence
-            labels = [
-                f"#{tracker_id} {model.model.names[class_id]} {confidence:0.2f}"
-                for confidence, class_id, tracker_id
-                in zip(detections.confidence, detections.class_id, detections.tracker_id)
-            ]
+        # Label format: #tracker_id class confidence
+        labels = [
+            f"#{tracker_id} {model.model.names[class_id]} {confidence:0.2f}"
+            for confidence, class_id, tracker_id
+            in zip(detections.confidence, detections.class_id, detections.tracker_id)
+        ]
 
-            # Annotate frame
-            annotated_frame = frame.copy()
-            annotated_frame = trace_annotator.annotate(annotated_frame, detections)
-            annotated_frame = bounding_box_annotator.annotate(annotated_frame, detections)
-            annotated_frame = label_annotator.annotate(annotated_frame, detections, labels)
+        # Annotate frame
+        annotated_frame = frame.copy()
+        annotated_frame = trace_annotator.annotate(annotated_frame, detections)
+        annotated_frame = bounding_box_annotator.annotate(annotated_frame, detections)
+        annotated_frame = label_annotator.annotate(annotated_frame, detections, labels)
 
-            # Trigger and draw line zone
-            line_zone.trigger(detections)
-            annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
+        # Trigger and draw line zone
+        line_zone.trigger(detections)
+        annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
 
-            # Show frame
-            cv2.imshow("Webcam + Supervision", annotated_frame)
+        # Show frame
+        cv2.imshow("Webcam + Supervision", annotated_frame)
 
-            # Save to file
+        # Save to file
+        with sink:
             sink.write_frame(annotated_frame)
 
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                break
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
 
     cap.release()
     sink.close()
