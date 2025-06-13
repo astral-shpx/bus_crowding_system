@@ -36,11 +36,11 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
         if use_horizontal:
             START = sv.Point(0, int(video_info.height / d_line_ratio))
             END = sv.Point(video_info.width, int(video_info.height / d_line_ratio))
-            line_zone = sv.LineZone(start=START, end=END)
         elif use_vertical:
             START = sv.Point(int(video_info.width / d_line_ratio), 0)
             END = sv.Point(int(video_info.width / d_line_ratio), video_info.height)
-            line_zone = sv.LineZone(start=START, end=END)
+        
+        line_zone = sv.LineZone(start=START, end=END)
         
         while True:
             ret, frame = cap.read()
@@ -89,11 +89,11 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
         if use_horizontal:
             START = sv.Point(0, int(video_info.height / d_line_ratio))
             END = sv.Point(video_info.width, int(video_info.height / d_line_ratio))
-            line_zone = sv.LineZone(start=START, end=END)
         elif use_vertical:
             START = sv.Point(int(video_info.width / d_line_ratio), 0)
             END = sv.Point(int(video_info.width / d_line_ratio), video_info.height)
-            line_zone = sv.LineZone(start=START, end=END)
+        
+        line_zone = sv.LineZone(start=START, end=END)
 
         def callback(frame: np.ndarray, index: int) -> np.ndarray:
             results = model(frame, verbose=False)[0]
@@ -194,7 +194,7 @@ def main(argv):
         input_video=input_video,
         use_vertical=use_vertical,
         use_horizontal=use_horizontal,
-        d_line_ratio=d_line_ratio
+        d_line_ratio=d_line_ratio or 2
     )
 
 if __name__ == "__main__":
