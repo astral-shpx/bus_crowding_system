@@ -70,16 +70,9 @@ def main():
         ]
 
         annotated_frame = frame.copy()
-        annotated_frame = trace_annotator.annotate(
-            scene=annotated_frame,
-            detections=detections)
-        annotated_frame = bounding_box_annotator.annotate(
-            scene=annotated_frame,
-            detections=detections)
-        annotated_frame = label_annotator.annotate(
-            scene=annotated_frame,
-            detections=detections,
-            labels=labels)
+        annotated_frame = trace_annotator.annotate(annotated_frame, detections)
+        annotated_frame = bounding_box_annotator.annotate(annotated_frame, detections)
+        annotated_frame = label_annotator.annotate(annotated_frame, detections, labels)
 
         line_zone.trigger(detections)
 

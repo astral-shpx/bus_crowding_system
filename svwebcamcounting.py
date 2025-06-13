@@ -73,7 +73,6 @@ def main():
             break
 
     cap.release()
-    sink.close()
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
