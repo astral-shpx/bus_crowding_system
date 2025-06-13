@@ -20,9 +20,14 @@ def main():
     line_zone_annotator = sv.LineZoneAnnotator(thickness=4, text_thickness=4, text_scale=2)
 
     # Define a horizontal line somewhere on the screen
-    line_y_pos = int(height / 1.5)
-    START = sv.Point(0, line_y_pos)
-    END = sv.Point(width, line_y_pos)
+    # TODO param specifying line
+    # line_y_pos = int(height / 1.5)
+    # START = sv.Point(0, line_y_pos)
+    # END = sv.Point(width, line_y_pos)
+    # line_zone = sv.LineZone(start=START, end=END)
+    line_x_pos = int(width / 2)
+    START = sv.Point(line_x_pos, 0)
+    END = sv.Point(line_x_pos, height)
     line_zone = sv.LineZone(start=START, end=END)
     
     now = datetime.now()
