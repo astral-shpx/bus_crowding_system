@@ -10,7 +10,7 @@ import requests
 
 API_URL = "http://127.0.0.1:5000/api/people_counts"
 
-def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_ratio=2, mode="webcam"):
+def people_counter(input_video: Path, use_horizontal, show=False, send_to_server=False, use_vertical=True, d_line_ratio=2, mode="webcam"):
 
     model = YOLO("models/yolo11n.pt")
 
@@ -70,19 +70,21 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
             line_zone.trigger(detections)
             annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
 
-            in_out_state["prev_in"], in_out_state["prev_out"] = send_to_api(
-                in_count=line_zone.in_count,
-                out_count=line_zone.out_count,
-                prev_in=in_out_state["prev_in"],
-                prev_out=in_out_state["prev_out"]
-            )
+            if send_to_server:
+                in_out_state["prev_in"], in_out_state["prev_out"] = send_to_api(
+                    in_count=line_zone.in_count,
+                    out_count=line_zone.out_count,
+                    prev_in=in_out_state["prev_in"],
+                    prev_out=in_out_state["prev_out"]
+                )
 
-            cv2.imshow("Webcam + Supervision", annotated_frame)
+            if show:
+                cv2.imshow("Webcam + Supervision", annotated_frame)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+
             with sink:
                 sink.write_frame(annotated_frame)
-
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                break
 
         cap.release()
         cv2.destroyAllWindows()
@@ -126,16 +128,18 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
             line_zone.trigger(detections)
             annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
 
-            in_out_state["prev_in"], in_out_state["prev_out"] = send_to_api(
-                in_count=line_zone.in_count,
-                out_count=line_zone.out_count,
-                prev_in=in_out_state["prev_in"],
-                prev_out=in_out_state["prev_out"]
-            )
+            if send_to_server:
+                in_out_state["prev_in"], in_out_state["prev_out"] = send_to_api(
+                    in_count=line_zone.in_count,
+                    out_count=line_zone.out_count,
+                    prev_in=in_out_state["prev_in"],
+                    prev_out=in_out_state["prev_out"]
+                )
 
-            cv2.imshow("Video + Supervision", annotated_frame)
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                raise KeyboardInterrupt("Stopped by user")
+            if show:
+                cv2.imshow("Video + Supervision", annotated_frame)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    raise KeyboardInterrupt("Stopped by user")
 
             return annotated_frame
 
@@ -174,6 +178,7 @@ def print_usage():
     print("  -v                   Use a vertical line (x-axis based)")
     print("  -z                   Use a horizontal line (y-axis based)")
     print("  -r, --line-ratio     Line position ratio (e.g., 1.5 means height or width / 1.5)")
+    print("  -s, --send           Send to flask server at localhost")
     print("  -h                   Show this help message")
 
 def main(argv):
@@ -182,9 +187,10 @@ def main(argv):
     use_vertical = False
     use_horizontal = False
     d_line_ratio = None
+    send_to_server = False
 
     try:
-        opts, args = getopt.getopt(argv, "hm:i:vzr:", ["mode=", "input-video=", "line-ratio="])
+        opts, args = getopt.getopt(argv, "hm:i:vzr:s", ["mode=", "input-video=", "line-ratio=", "send"])
     except getopt.GetoptError:
         print_usage()
         sys.exit(2)
@@ -203,6 +209,8 @@ def main(argv):
             use_horizontal = True
         elif opt in ("-r", "--line-ratio"):
             d_line_ratio = float(arg)
+        elif opt in ("-s", "--save"):
+            send_to_server = True
 
     if mode not in ["webcam", "video"]:
         print_usage()
@@ -229,7 +237,9 @@ def main(argv):
         input_video=input_video,
         use_vertical=use_vertical,
         use_horizontal=use_horizontal,
-        d_line_ratio=d_line_ratio or 2
+        d_line_ratio=d_line_ratio or 2,
+        show=True,
+        send_to_server=send_to_server
     )
 
 if __name__ == "__main__":
