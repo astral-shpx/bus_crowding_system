@@ -50,7 +50,7 @@ graph TD
 
 # Video sources
 
-TODO
+[walking_people.mp4](https://pixabay.com/videos/people-commerce-shop-busy-mall-6387/)
 
 # Code sources
 
