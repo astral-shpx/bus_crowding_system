@@ -3,3 +3,5 @@ numpy
 ultralytics
 # cvzone
 supervision
+flask
+sqlite3

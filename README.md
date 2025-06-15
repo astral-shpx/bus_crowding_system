@@ -1,5 +1,4 @@
-
-...
+# Diagram
 
 ```mermaid
 graph TD
@@ -31,9 +30,11 @@ graph TD
 
 # Commands
 
-ffmpeg -i videos/FootfallVideo.mp4 -vf  "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:a copy videos/scaleddown-FootfallVideo.mp4 
+`python ./svcounter.py -m video -i ./videos/walking_people.mp4`
 
-TODO ...
+`flask --app .\api\server.py run --host=0.0.0.0`
+
+`ffmpeg -i videos/FootfallVideo.mp4 -vf  "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:a copy videos/scaleddown-FootfallVideo.mp4`
 
 # Video sources
 
@@ -41,8 +42,7 @@ TODO
 
 # Code sources
 
-supervisioncounting.py:
-https://supervision.roboflow.com/develop/notebooks/count-objects-crossing-the-line/
+- https://supervision.roboflow.com/develop/notebooks/count-objects-crossing-the-line/
 
 # Model
 

@@ -6,3 +6,6 @@ results/*
 !results/.gitkeep
 models/*
 !models/.gitkeep
+db/*
+!db/.gitkeep
+__pycache__

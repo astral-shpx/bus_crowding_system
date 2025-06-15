@@ -6,10 +6,15 @@ import cv2
 import sys
 import getopt
 from pathlib import Path
+import requests
+
+API_URL = "http://127.0.0.1:5000/api/people_counts"
 
 def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_ratio=2, mode="webcam"):
 
     model = YOLO("models/yolo11n.pt")
+
+    in_out_state = {'prev_in': 0, 'prev_out': 0}
 
     # Annotators
     byte_tracker = sv.ByteTrack()
@@ -65,6 +70,13 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
             line_zone.trigger(detections)
             annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
 
+            in_out_state["prev_in"], in_out_state["prev_out"] = send_to_api(
+                in_count=line_zone.in_count,
+                out_count=line_zone.out_count,
+                prev_in=in_out_state["prev_in"],
+                prev_out=in_out_state["prev_out"]
+            )
+
             cv2.imshow("Webcam + Supervision", annotated_frame)
             with sink:
                 sink.write_frame(annotated_frame)
@@ -114,6 +126,13 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
             line_zone.trigger(detections)
             annotated_frame = line_zone_annotator.annotate(annotated_frame, line_counter=line_zone)
 
+            in_out_state["prev_in"], in_out_state["prev_out"] = send_to_api(
+                in_count=line_zone.in_count,
+                out_count=line_zone.out_count,
+                prev_in=in_out_state["prev_in"],
+                prev_out=in_out_state["prev_out"]
+            )
+
             cv2.imshow("Video + Supervision", annotated_frame)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 raise KeyboardInterrupt("Stopped by user")
@@ -127,6 +146,22 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
         )
     else:
         raise RuntimeError("Mode must be <webcam|video>")
+
+def send_to_api(in_count, out_count, prev_in, prev_out):
+    if in_count != prev_in or out_count != prev_out:
+        timestamp = datetime.now().isoformat()
+        data = {
+            "timestamp": timestamp,
+            "in_count": in_count,
+            "out_count": out_count
+        }
+        try:
+            response = requests.post(API_URL, json=data, timeout=5)
+            response.raise_for_status()
+            print(f"Sent to API: {data}")
+        except requests.exceptions.RequestException as e:
+            print(f"Failed to send data: {e}")
+    return in_count, out_count
 
 def print_usage():
     print("Usage:")
