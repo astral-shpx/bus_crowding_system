@@ -3,3 +3,4 @@ numpy
 ultralytics
 supervision
 flask
+flask-cors

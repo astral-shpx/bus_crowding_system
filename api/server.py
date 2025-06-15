@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from datetime import datetime
 import sqlite3
 import os
@@ -22,6 +23,7 @@ cursor.execute('''
 conn.commit()
 
 app = Flask(__name__)
+CORS(app) # Dev CORS
 
 @app.post("/api/people_counts")
 def people_counts():
@@ -38,6 +40,31 @@ def people_counts():
         conn.commit()
 
         return jsonify({"status": "success", "message": "Data inserted"}), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+@app.get("/api/get_people_count")
+def get_people_count():
+    try:
+        cursor.execute('''
+            SELECT timestamp, in_count, out_count
+            FROM people_counts
+            ORDER BY timestamp DESC
+            LIMIT 1
+        ''')
+        row = cursor.fetchone()
+
+        if row:
+            result = {
+                "timestamp": row[0],
+                "in_count": row[1],
+                "out_count": row[2],
+                "onboard": row[1] - row[2] if row[1] - row[2] > 0 else 0
+            }
+            return jsonify({"status": "success", "data": result}), 200
+        else:
+            return jsonify({"status": "success", "data": None, "message": "No data found"}), 200
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400
