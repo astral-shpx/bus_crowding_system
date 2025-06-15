@@ -24,7 +24,7 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         fps = cap.get(cv2.CAP_PROP_FPS) or 30
         video_info = sv.VideoInfo(width=width, height=height, fps=fps)
-        now = datetime.now().strftime("%H:%M-%d-%B-%Y")
+        now = datetime.now().strftime("%H-%M_%d-%B-%Y")
         sink = sv.VideoSink(
             target_path=f"results/webcam_output_{now.strip()}.mp4",
             video_info=video_info
@@ -78,7 +78,7 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
     elif mode == "video":        
         SOURCE_VIDEO_PATH = input_video
 
-        now = datetime.now().strftime("%H:%M-%d-%B")
+        now = datetime.now().strftime("%H-%M_%d-%B")
         TARGET_VIDEO_PATH = f"results/sv-{input_video.stem}-{now.strip()}.mp4"
 
         video_info = sv.VideoInfo.from_video_path(SOURCE_VIDEO_PATH)
