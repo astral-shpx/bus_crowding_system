@@ -1,7 +1,5 @@
 opencv-python
 numpy
 ultralytics
-# cvzone
 supervision
 flask
-sqlite3

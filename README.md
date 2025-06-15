@@ -30,9 +30,21 @@ graph TD
 
 # Commands
 
-`python ./svcounter.py -m video -i ./videos/walking_people.mp4`
+`python -m venv venv`
+
+`.\venv\Scripts\Activate.ps1` on Windows
+
+`source venv/bin/activate` on Linux
+
+`pip install -r .\requirements.txt`
 
 `flask --app .\api\server.py run --host=0.0.0.0`
+
+`python ./svcounter.py -m video -i ./videos/walking_people.mp4 -s`
+
+`cd frontend && pnpm build && pnpm preview --host 0.0.0.0`
+
+---
 
 `ffmpeg -i videos/FootfallVideo.mp4 -vf  "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:a copy videos/scaleddown-FootfallVideo.mp4`
 
