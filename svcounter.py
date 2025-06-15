@@ -45,6 +45,10 @@ def people_counter(input_video: Path, use_horizontal, show=False, send_to_server
             START = sv.Point(int(video_info.width / d_line_ratio), 0)
             END = sv.Point(int(video_info.width / d_line_ratio), video_info.height)
         
+        if show:
+            cv2.namedWindow("Webcam + Supervision", cv2.WINDOW_NORMAL)
+            cv2.resizeWindow("Webcam + Supervision", 800, 600)  # Width x Height in pixels
+
         line_zone = sv.LineZone(start=START, end=END)
         
         while True:
@@ -108,6 +112,9 @@ def people_counter(input_video: Path, use_horizontal, show=False, send_to_server
             END = sv.Point(int(video_info.width / d_line_ratio), video_info.height)
         
         line_zone = sv.LineZone(start=START, end=END)
+
+        cv2.namedWindow("Video + Supervision", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("Video + Supervision", 800, 600)
 
         def callback(frame: np.ndarray, index: int) -> np.ndarray:
             results = model(frame, verbose=False)[0]
