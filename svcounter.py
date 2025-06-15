@@ -14,9 +14,9 @@ def people_counter(input_video: Path, use_horizontal, use_vertical=True, d_line_
     # Annotators
     byte_tracker = sv.ByteTrack()
     bounding_box_annotator = sv.BoundingBoxAnnotator(thickness=4)
-    label_annotator = sv.LabelAnnotator(text_thickness=2, text_scale=1)
-    trace_annotator = sv.TraceAnnotator(thickness=4)
-    line_zone_annotator = sv.LineZoneAnnotator(thickness=4, text_thickness=4, text_scale=2)
+    label_annotator = sv.LabelAnnotator(text_thickness=1, text_scale=0.5)
+    trace_annotator = sv.TraceAnnotator(thickness=2)
+    line_zone_annotator = sv.LineZoneAnnotator(thickness=4, text_thickness=4, text_scale=1.5)
 
     if mode == "webcam":
         cap = cv2.VideoCapture(0)
