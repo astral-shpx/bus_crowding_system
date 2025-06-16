@@ -1,6 +1,6 @@
 <script setup>
 import { Line } from 'vue-chartjs'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, onUnmounted } from 'vue'
 import { useApiStore } from '@/stores/apiStore'
 import {
   Chart as ChartJS,
@@ -26,6 +26,8 @@ ChartJS.register(
 )
 
 const apiStore = useApiStore()
+
+let intervalId = null
 
 const chartData = ref({
   labels: [],
@@ -113,6 +115,14 @@ watch(
 
 onMounted(() => {
   apiStore.fetchPeopleCount()
+
+  intervalId = setInterval(() => {
+    apiStore.fetchPeopleCount()
+  }, 5000)
+})
+
+onUnmounted(() => {
+  clearInterval(intervalId)
 })
 </script>
 
