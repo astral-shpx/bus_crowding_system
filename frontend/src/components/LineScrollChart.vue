@@ -1,5 +1,6 @@
 <script setup>
 import { Line } from 'vue-chartjs'
+import 'chartjs-adapter-luxon'
 import { defineProps } from 'vue'
 import {
   Chart as ChartJS,
@@ -11,6 +12,7 @@ import {
   CategoryScale,
   LinearScale,
   Filler,
+  TimeScale,
 } from 'chart.js'
 
 ChartJS.register(
@@ -22,6 +24,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   Filler,
+  TimeScale,
 )
 
 const props = defineProps({

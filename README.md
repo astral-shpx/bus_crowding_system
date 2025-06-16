@@ -48,6 +48,10 @@ graph TD
 
 `ffmpeg -i videos/FootfallVideo.mp4 -vf  "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:a copy videos/scaleddown-FootfallVideo.mp4`
 
+`get-Content db/data.sql | sqlite3.exe .\db\data.sqlite`
+
+`sqlite3.exe .\db\data.sqlite < data.sql`
+
 # Video sources
 
 [walking_people.mp4](https://pixabay.com/videos/people-commerce-shop-busy-mall-6387/)

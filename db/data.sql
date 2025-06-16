@@ -8,34 +8,80 @@ CREATE TABLE IF NOT EXISTS people_counts (
 -- Clear any existing data from the table
 -- DELETE FROM people_counts;
 
--- Insert generated data
--- Data for approximately 25-30 minutes, starting at 2025-05-15 09:00:00
--- Timestamps are in 'YYYY-MM-DD HH:MM:SS' format
+-- Insert data
 
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:00:00.000000', 7, 0);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:01:45.000000', 2, 1);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:03:03.000000', 1, 0);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:04:09.000000', 0, 1);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:05:43.000000', 2, 0); -- Passengers on board (7 - 1 + 2 - 1 + 2 = 9). First entry at 09:00:00. This is 5m43s later.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:07:33.000000', 1, 2); -- On board duration: 7m33s. Still 8 on board.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:08:18.000000', 0, 2); -- On board duration: 8m18s. Still 6 on board.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:10:07.000000', 0, 5); -- On board duration met. Disembarking. 1 left.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:11:08.000000', 0, 1); -- Fully disembarked.
+-- Start of Journey (Approx. 09:00)
+-- Stop 1: Initial Boarding (Bus was likely empty)
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:00:10.000000', 20, 0); -- Initial large boarding
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:01:00.000000', 5, 0);  -- A few more board. Onboard: 25.
 
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:12:49.000000', 9, 0); -- New boarding phase.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:13:58.000000', 3, 0);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:15:37.000000', 0, 1);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:16:51.000000', 1, 2); -- On board (9 + 3 - 1 + 1 - 2 = 10). From 09:12:49, this is 4m2s.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:18:24.000000', 2, 0); -- On board duration: 5m35s. Now 12 on board.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:19:40.000000', 0, 2); -- On board duration: 6m51s. Now 10 on board.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:21:28.000000', 0, 6); -- Disembarking. 4 left.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:22:31.000000', 0, 4); -- Fully disembarked.
+-- Travel 1 (~5 mins)
 
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:23:44.000000', 5, 0); -- New boarding phase.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:24:46.000000', 1, 1);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:26:15.000000', 3, 0);
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:27:50.000000', 0, 2); -- On board (5 + 1 - 1 + 3 - 2 = 6). From 09:23:44, this is 4m6s.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:29:05.000000', 2, 1); -- On board duration: 5m21s. Now 7 on board.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:30:30.000000', 1, 0); -- On board duration: 6m46s. Now 8 on board.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:31:55.000000', 0, 7); -- Disembarking. 1 left.
-INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:33:00.000000', 0, 1); -- Fully disembarked.
+-- Stop 2 (Approx. 09:06) - Mix of getting off and on
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:06:35.000000', 2, 3);  -- 2 board, 3 get off. Net: -1. Onboard: 24.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:07:15.000000', 5, 1);  -- 5 board, 1 gets off. Net: +4. Onboard: 28.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:07:50.000000', 3, 2);  -- 3 board, 2 get off. Net: +1. Onboard: 29.
+
+-- Travel 2 (~8 mins)
+-- Onboard: 29
+
+-- Stop 3 (Approx. 09:16) - More disembarking as some reach their destination (~15-16 mins journey)
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:16:20.000000', 1, 8);  -- 1 boards, 8 get off. Net: -7. Onboard: 22.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:17:05.000000', 3, 5);  -- 3 board, 5 get off. Net: -2. Onboard: 20.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:17:45.000000', 6, 2);  -- 6 board, 2 get off. Net: +4. Onboard: 24.
+
+-- Travel 3 (~6 mins)
+-- Onboard: 24
+
+-- Stop 4 (Approx. 09:24) - Mix of disembarking and boarding
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:24:30.000000', 2, 7);  -- 2 board, 7 get off. Net: -5. Onboard: 19.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:25:00.000000', 4, 3);  -- 4 board, 3 get off. Net: +1. Onboard: 20.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:25:35.000000', 5, 1);  -- 5 board, 1 gets off. Net: +4. Onboard: 24.
+
+-- Travel 4 (~11 mins) - Longer travel segment
+
+-- Stop 5 (Approx. 09:37) - More disembarking (~19-20 mins journey)
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:37:10.000000', 1, 6);  -- 1 board, 6 get off. Net: -5. Onboard: 19.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:37:50.000000', 3, 4);  -- 3 board, 4 get off. Net: -1. Onboard: 18.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:38:25.000000', 7, 2);  -- 7 board, 2 get off. Net: +5. Onboard: 23.
+
+-- Travel 5 (~7 mins)
+
+-- Stop 6 (Approx. 09:46) - Mix of disembarking and boarding
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:46:00.000000', 2, 5);  -- 2 board, 5 get off. Net: -3. Onboard: 20.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:46:40.000000', 4, 3);  -- 4 board, 3 get off. Net: +1. Onboard: 21.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:47:15.000000', 6, 1);  -- 6 board, 1 gets off. Net: +5. Onboard: 26.
+
+-- Travel 7 (~9 mins)
+
+-- Stop 8 (Approx. 09:57) - More disembarking (~19-20 mins journey)
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:57:05.000000', 1, 5);  -- 1 board, 5 get off. Net: -4. Onboard: 22.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:57:45.000000', 2, 4);  -- 2 board, 4 get off. Net: -2. Onboard: 20.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T09:58:20.000000', 5, 1);  -- 5 board, 1 gets off. Net: +4. Onboard: 24.
+
+-- Travel 8 (~6 mins)
+
+-- Stop 9 (Approx. 10:05) - Mix of disembarking and boarding
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:05:35.000000', 2, 6);  -- 2 board, 6 get off. Net: -4. Onboard: 20.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:06:15.000000', 3, 3);  -- 3 board, 3 get off. Net: 0. Onboard: 20.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:06:50.000000', 4, 1);  -- 4 board, 1 gets off. Net: +3. Onboard: 23.
+
+-- Travel 9 (~8 mins)
+
+-- Stop 10 (Approx. 10:15) - More disembarking (~17-18 mins journey)
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:15:00.000000', 1, 5);  -- 1 board, 5 get off. Net: -4. Onboard: 19.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:15:40.000000', 2, 4);  -- 2 board, 4 get off. Net: -2. Onboard: 17.
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:16:20.000000', 3, 1);  -- 3 board, 1 gets off. Net: +2. Onboard: 19.
+
+-- End of ~1 hour and 16 minutes journey (Approx. 10:16)
+-- Bus might continue or arrive at a terminal and empty out.
+
+-- Travel 10 (~7 mins)
+
+-- Final Stop (Approx. 10:24) - Majority disembark
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:24:00.000000', 0, 10); -- Significant number get off
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:24:40.000000', 0, 5);  -- More get off
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:25:15.000000', 0, 4);  -- Remaining off. Onboard: 0.
+
+-- Bus is now empty (or starts a new route)
+INSERT INTO people_counts (timestamp, in_count, out_count) VALUES ('2025-05-15T10:30:00.000000', 15, 0); -- New journey begins
