@@ -56,7 +56,7 @@ const chartOptionsMock = ref({
   scales: {
     y: {
       min: 0,
-      max: 25,
+      max: 35,
       title: {
         display: true,
         text: 'Брой пътници',
