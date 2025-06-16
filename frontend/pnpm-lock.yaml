@@ -4,6 +4,7 @@ specifiers:
   '@eslint/js': ^9.22.0
   '@vitejs/plugin-vue': ^5.2.3
   '@vue/eslint-config-prettier': ^10.2.0
+  chart.js: ^4.5.0
   eslint: ^9.22.0
   eslint-plugin-vue: ~10.0.0
   globals: ^16.0.0
@@ -12,12 +13,15 @@ specifiers:
   vite: ^6.2.4
   vite-plugin-vue-devtools: ^7.7.2
   vue: ^3.5.13
+  vue-chartjs: ^5.3.2
   vue-eslint-parser: ^10.0.0
   vue-router: ^4.5.0
 
 dependencies:
+  chart.js: 4.5.0
   pinia: 3.0.3_vue@3.5.16
   vue: 3.5.16
+  vue-chartjs: 5.3.2_chart.js@4.5.0+vue@3.5.16
   vue-eslint-parser: 10.1.3_eslint@9.29.0
   vue-router: 4.5.1_vue@3.5.16
 
@@ -685,6 +689,10 @@ packages:
       '@jridgewell/sourcemap-codec': 1.5.0
     dev: true
 
+  /@kurkle/color/0.3.4:
+    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
+    dev: false
+
   /@pkgr/core/0.2.7:
     resolution: {integrity: sha512-YLT9Zo3oNPJoBjBc4q8G2mjU4tqIbf5CEOORbUUr48dCD9q3umJ3IPlVqOqDakPfd2HuwccBaqlGhN4Gmr5OWg==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -1137,6 +1145,13 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  /chart.js/4.5.0:
+    resolution: {integrity: sha512-aYeC/jDgSEx8SHWZvANYMioYMZ2KX02W6f6uVfyteuCGcadDLcYVHdfdygsTQkQ4TKn5lghoojAsPj5pu0SnvQ==}
+    engines: {pnpm: '>=8'}
+    dependencies:
+      '@kurkle/color': 0.3.4
+    dev: false
 
   /color-convert/2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
@@ -2148,6 +2163,16 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /vue-chartjs/5.3.2_chart.js@4.5.0+vue@3.5.16:
+    resolution: {integrity: sha512-NrkbRRoYshbXbWqJkTN6InoDVwVb90C0R7eAVgMWcB9dPikbruaOoTFjFYHE/+tNPdIe6qdLCDjfjPHQ0fw4jw==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      vue: ^3.0.0-0 || ^2.7.0
+    dependencies:
+      chart.js: 4.5.0
+      vue: 3.5.16
+    dev: false
 
   /vue-eslint-parser/10.1.3_eslint@9.29.0:
     resolution: {integrity: sha512-dbCBnd2e02dYWsXoqX5yKUZlOt+ExIpq7hmHKPb5ZqKcjf++Eo0hMseFTZMLKThrUk61m+Uv6A2YSBve6ZvuDQ==}

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timedelta
 import sqlite3
 import os
 from pathlib import Path
@@ -43,6 +43,48 @@ def people_counts():
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400
+
+@app.get("/api/people_count_last_10x10min")
+def get_people_count_last_10x10min():
+    try:
+        cursor.execute('SELECT timestamp FROM people_counts ORDER BY timestamp DESC LIMIT 1')
+        latest_row = cursor.fetchone()
+
+        if not latest_row:
+            return jsonify(content={"status": "success", "data": [], "message": "No data found"}, status_code=200)
+
+        latest_ts_str = latest_row[0]
+        latest_ts = datetime.fromisoformat(latest_ts_str)
+
+        data = []
+
+        for i in range(10):
+            end_time = latest_ts - timedelta(minutes=10 * i)
+            start_time = end_time - timedelta(minutes=10)
+
+            cursor.execute('''
+                SELECT SUM(in_count), SUM(out_count)
+                FROM people_counts
+                WHERE timestamp > ? AND timestamp <= ?
+            ''', (start_time.isoformat(), end_time.isoformat()))
+
+            result = cursor.fetchone()
+            in_sum = result[0] or 0
+            out_sum = result[1] or 0
+
+            data.append({
+                "timestamp": end_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "in_count": in_sum,
+                "out_count": out_sum,
+                "onboard": max(in_sum - out_sum, 0)
+            })
+
+        data.reverse()
+
+        return jsonify(content={"status": "success", "data": data}, status_code=200)
+
+    except Exception as e:
+        return jsonify(content={"status": "error", "message": str(e)}, status_code=400)
 
 @app.get("/api/get_people_count")
 def get_people_count():
