@@ -3,18 +3,18 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useApiStore = defineStore('api', () => {
-  const peopleCount = ref(null)
+  const lastPeopleCount = ref(null)
 
-  const fetchPeopleCount = async () => {
+  const fetchLastPeopleCount = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/people_count_last_10x10min`)
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/people_count_last_10x5min`)
       if (!res.ok) throw new Error('Failed to fetch')
       const data = await res.json()
-      peopleCount.value = data
+      lastPeopleCount.value = data
     } catch (error) {
-      peopleCount.value = { status: 'error', message: error.message }
+      lastPeopleCount.value = { status: 'error', message: error.message }
     }
   }
 
-  return { peopleCount, fetchPeopleCount }
+  return { lastPeopleCount, fetchLastPeopleCount }
 })

@@ -44,14 +44,14 @@ def people_counts():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400
 
-@app.get("/api/people_count_last_10x10min")
+@app.get("/api/people_count_last_10x5min")
 def get_people_count_last_10x10min():
     try:
         cursor.execute('SELECT timestamp FROM people_counts ORDER BY timestamp DESC LIMIT 1')
         latest_row = cursor.fetchone()
 
         if not latest_row:
-            return jsonify(content={"status": "success", "data": [], "message": "No data found"}, status_code=200)
+            return jsonify({"status": "success", "data": [], "message": "No data found"}), 200
 
         latest_ts_str = latest_row[0]
         latest_ts = datetime.fromisoformat(latest_ts_str)
@@ -59,8 +59,8 @@ def get_people_count_last_10x10min():
         data = []
 
         for i in range(10):
-            end_time = latest_ts - timedelta(minutes=10 * i)
-            start_time = end_time - timedelta(minutes=10)
+            end_time = latest_ts - timedelta(minutes=5 * i)
+            start_time = end_time - timedelta(minutes=5)
 
             cursor.execute('''
                 SELECT SUM(in_count), SUM(out_count)
@@ -81,32 +81,58 @@ def get_people_count_last_10x10min():
 
         data.reverse()
 
-        return jsonify(content={"status": "success", "data": data}, status_code=200)
+        return jsonify({"status": "success", "data": data}),200
 
     except Exception as e:
-        return jsonify(content={"status": "error", "message": str(e)}, status_code=400)
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.get("/api/get_people_count")
 def get_people_count():
     try:
+        start_str = request.args.get('start')
+        range_str = request.args.get('range', '24h')
+
+        if start_str:
+            start_time = datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
+        else:
+            start_time = datetime.now() - timedelta(hours=24)
+
+        time_unit = range_str[-1]
+        amount = int(range_str[:-1])
+        if time_unit == 'h':
+            end_time = start_time + timedelta(hours=amount)
+        elif time_unit == 'm':
+            end_time = start_time + timedelta(minutes=amount)
+        elif time_unit == 'd':
+            end_time = start_time + timedelta(days=amount)
+        else:
+            return jsonify({"status": "error", "message": "Invalid range format"}), 400
+
         cursor.execute('''
             SELECT timestamp, in_count, out_count
             FROM people_counts
-            ORDER BY timestamp DESC
-            LIMIT 1
-        ''')
-        row = cursor.fetchone()
+            WHERE timestamp BETWEEN ? AND ?
+            ORDER BY timestamp ASC
+        ''', (start_time.isoformat(), end_time.isoformat()))
 
-        if row:
-            result = {
+        rows = cursor.fetchall()
+        data = []
+        onboard = 0
+
+        for row in rows:
+            in_count = row[1] or 0
+            out_count = row[2] or 0
+            onboard += in_count - out_count
+            onboard = max(onboard, 0)
+
+            data.append({
                 "timestamp": row[0],
-                "in_count": row[1],
-                "out_count": row[2],
-                "onboard": row[1] - row[2] if row[1] - row[2] > 0 else 0
-            }
-            return jsonify({"status": "success", "data": result}), 200
-        else:
-            return jsonify({"status": "success", "data": None, "message": "No data found"}), 200
+                "in_count": in_count,
+                "out_count": out_count,
+                "onboard": onboard,
+            })
+
+        return jsonify({"status": "success", "data": data}), 200
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400

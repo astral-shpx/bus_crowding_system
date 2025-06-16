@@ -8,4 +8,5 @@ models/*
 !models/.gitkeep
 db/*
 !db/.gitkeep
+!db/*.sql
 __pycache__
