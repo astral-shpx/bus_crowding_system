@@ -93,7 +93,7 @@ def get_people_count():
         range_str = request.args.get('range', '24h')
 
         if start_str:
-            start_time = datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
+            start_time = datetime.strptime(start_str, '%Y-%m-%dT%H:%M:%S.%f')
         else:
             start_time = datetime.now() - timedelta(hours=24)
 
