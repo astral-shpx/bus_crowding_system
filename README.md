@@ -38,7 +38,7 @@ graph TD
 
 `pip install -r .\requirements.txt`
 
-`flask --app .\api\server.py run --host=0.0.0.0`
+`flask --app ./api/server.py run --host=0.0.0.0`
 
 `python ./svcounter.py -m video -i ./videos/walking_people.mp4 -s`
 
