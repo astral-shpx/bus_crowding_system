@@ -12,7 +12,7 @@ graph TD
     end
 
     subgraph Облачна ифраструктура
-        CloudData --> Analytics[Програма за аланиз на данни]
+        CloudData --> Analytics[Програма за анализ на данни]
         Analytics --> Authorities[Табло за управление на администрацията]
         Analytics --> WebApp[Публично приложение или сайт]
     end
