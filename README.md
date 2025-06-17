@@ -11,7 +11,7 @@ graph TD
         LineDetect --> CloudData[Пращане на броя хора в облака]
     end
 
-    subgraph Облачна ифраструктура
+    subgraph Облачна инфраструктура
         CloudData --> Analytics[Програма за анализ на данни]
         Analytics --> Authorities[Табло за управление на администрацията]
         Analytics --> WebApp[Публично приложение или сайт]
