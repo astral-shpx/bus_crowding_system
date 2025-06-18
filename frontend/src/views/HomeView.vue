@@ -4,7 +4,7 @@
   <div class="home">
     <h1>Добре дошли</h1>
     <p>Този демо сайт ви показва данни за броя на пътниците в реално време и за минали дати.</p>
-    <RouterLink to="/charts" class="btn">Виж диаграмите</RouterLink>
+    <RouterLink to="/charts" class="btn">Вижте диаграмите</RouterLink>
   </div>
 </template>
 
