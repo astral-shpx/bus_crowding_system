@@ -87,8 +87,8 @@ def people_counter(input_video: Path, use_horizontal, show=False, send_to_server
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
 
-            with sink:
-                sink.write_frame(annotated_frame)
+            # with sink:
+            #     sink.write_frame(annotated_frame)
 
         cap.release()
         cv2.destroyAllWindows()
