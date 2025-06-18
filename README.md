@@ -50,7 +50,7 @@ graph TD
 
 `get-Content db/data.sql | sqlite3.exe .\db\data.sqlite`
 
-`sqlite3.exe .\db\data.sqlite < data.sql`
+`sqlite3  db/data.sqlite < db/data.sql`
 
 # Video sources
 
