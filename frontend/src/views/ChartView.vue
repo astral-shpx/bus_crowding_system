@@ -21,8 +21,6 @@ const chartOptionsLast = ref({
   locale: 'bg',
   scales: {
     y: {
-      min: 0,
-      max: 100,
       title: {
         display: true,
         text: 'Брой пътници',
@@ -202,7 +200,16 @@ onMounted(async () => {
     chartOptionsMock.value.scales.y.max = Math.ceil(maxY + 1)
   }
 
-  apiStore.fetchLastPeopleCount()
+  await apiStore.fetchLastPeopleCount()
+
+  const inCounts = apiStore.lastPeopleCount.data.map((d) => d.in_count)
+  const outCounts = apiStore.lastPeopleCount.data.map((d) => d.out_count)
+  const onboardCounts = apiStore.lastPeopleCount.data.map((d) => d.onboard)
+
+  const minY = Math.min(...inCounts, ...outCounts, ...onboardCounts)
+  const maxY = Math.max(...inCounts, ...outCounts, ...onboardCounts)
+  chartOptionsLast.value.scales.y.min = Math.floor(minY - 1)
+  chartOptionsLast.value.scales.y.max = Math.ceil(maxY + 1)
 
   intervalId = setInterval(() => {
     apiStore.fetchLastPeopleCount()
