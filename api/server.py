@@ -45,21 +45,13 @@ def people_counts():
         return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.get("/api/people_count_last_10x5min")
-def get_people_count_last_10x10min():
+def get_people_count_last_10x5min():
     try:
-        cursor.execute('SELECT timestamp FROM people_counts ORDER BY timestamp DESC LIMIT 1')
-        latest_row = cursor.fetchone()
-
-        if not latest_row:
-            return jsonify({"status": "success", "data": [], "message": "No data found"}), 200
-
-        latest_ts_str = latest_row[0]
-        latest_ts = datetime.fromisoformat(latest_ts_str)
-
+        now = datetime.now().replace(second=0, microsecond=0)
         data = []
 
         for i in range(10):
-            end_time = latest_ts - timedelta(minutes=5 * i)
+            end_time = now - timedelta(minutes=5 * i)
             start_time = end_time - timedelta(minutes=5)
 
             cursor.execute('''
