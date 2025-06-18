@@ -87,6 +87,7 @@ def people_counter(input_video: Path, use_horizontal, show=False, send_to_server
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
 
+            # Save video from webcam
             # with sink:
             #     sink.write_frame(annotated_frame)
 
